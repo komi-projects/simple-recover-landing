@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ — SimpleRecover</title>
+  <meta name="description" content="Common questions about SimpleRecover: pricing, Stripe integration, dunning sequences, and payment recovery.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95' },
+            dark: { 900: '#0f0f23', 800: '#1a1a2e', 700: '#252545' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-bg { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #2d1b69 100%); }
+    .faq-item { border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-answer.open { max-height: 500px; }
+  </style>
+</head>
+<body class="font-sans antialiased bg-dark-900 text-white min-h-screen gradient-bg">
+  <nav class="fixed w-full z-50 bg-dark-900/80 backdrop-blur-lg border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <a href="landing/index.html" class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-700 to-primary-500 flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <span class="font-bold text-xl">SimpleRecover</span>
+        </a>
+        <a href="landing/pricing.html" class="text-sm text-gray-400 hover:text-white transition">Pricing →</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pt-32 pb-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <span class="inline-block bg-primary-500/10 text-primary-400 text-sm font-semibold px-3 py-1 rounded-full mb-4">Help Center</span>
+        <h1 class="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
+        <p class="text-xl text-gray-400">Everything you need to know about SimpleRecover.</p>
+      </div>
+
+      <div class="space-y-0">
+        <div class="faq-item py-5">
+          <button class="flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+            <span class="font-semibold text-lg">What is SimpleRecover?</span>
+            <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p class="text-gray-400 pt-3 pb-2">SimpleRecover is a Stripe dunning and payment recovery tool built specifically for indie SaaS founders. It recovers 60-80% of failed payments through smart retries and automated email sequences — compared to Stripe's default 38% recovery rate.</p>
+          </div>
+        </div>
+
+        <div class="faq-item py-5">
+          <button class="flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+            <span class="font-semibold text-lg">How does the 14-day free trial work?</span>
+            <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p class="text-gray-400 pt-3 pb-2">Start your trial instantly — no credit card required. Connect your Stripe account and we'll immediately show you how many payments failed in the last 30 days and how much revenue is at risk. You'll get full access to all features including smart retries and dunning emails.</p>
+          </div>
+        </div>
+
+        <div class="faq-item py-5">
+          <button class="flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+            <span class="font-semibold text-lg">Do I need to change my Stripe setup?</span>
+            <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p class="text-gray-400 pt-3 pb-2">No changes needed. SimpleRecover connects via Stripe Connect OAuth (the same system services like QuickBooks use). You just click "Connect Stripe" and authorize the connection. Your existing billing, subscriptions, and checkout flow stay exactly the same.</p>
+          </div>
+        </div>
+
+        <div class="faq-item py-5">
+          <button class="flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+            <span class="font-semibold text-lg">Is my Stripe data safe?</span>
+            <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p class="text-gray-400 pt-3 pb-2">Yes. We use Stripe Connect with limited read-only access to failed payment data. We never see your full customer list, card numbers, or bank details. All data is encrypted at rest and we comply with GDPR and Stripe's security requirements.</p>
+          </div>
+        </div>
+
+        <div class="faq-item py-5">
+          <button class="flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+            <span class="font-semibold text-lg">Can I customize the dunning emails?</span>
+            <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p class="text-gray-400 pt-3 pb-2">Absolutely. Customize the sender name, subject lines, email copy, and branding. You can also adjust the timing — send the first email immediately, the second after 3 days, the third after 7 days, and the final notice after 14 days. Or use our proven default sequence.</p>
+          </div>
+        </div>
+
+        <div class="faq-item py-5">
+          <button class="flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+            <span class="font-semibold text-lg">What happens if a payment is recovered?</span>
+            <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p class="text-gray-400 pt-3 pb-2">The customer receives a "Payment successful" confirmation email. The dunning sequence stops automatically. You get a Slack notification (if configured) and the recovery is tracked in your dashboard analytics. The customer never knew their access was at risk.</p>
+          </div>
+        </div>
+
+        <div class="faq-item py-5">
+          <button class="flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+            <span class="font-semibold text-lg">How is this different from Stripe's default retries?</span>
+            <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p class="text-gray-400 pt-3 pb-2">Stripe retries 3 times over 3 days with fixed timing. SimpleRecover adds: (1) Smart retry timing based on decline reason — wait 3 days for "insufficient funds" but retry in 1 hour for "processing error", (2) 4-email dunning sequence that progressively increases urgency, (3) One-click card update pages with no login required, (4) Slack alerts so you know exactly what's happening. Result: 60-80% recovery vs Stripe's 38%.</p>
+          </div>
+        </div>
+
+        <div class="faq-item py-5">
+          <button class="flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+            <span class="font-semibold text-lg">Can I cancel anytime?</span>
+            <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p class="text-gray-400 pt-3 pb-2">Yes. No contracts, no minimums. Cancel from your dashboard with one click. Your data is retained for 30 days in case you reactivate. If you reactivate within 30 days, all your settings and history are restored.</p>
+          </div>
+        </div>
+
+        <div class="faq-item py-5">
+          <button class="flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+            <span class="font-semibold text-lg">What's included in the $299 done-for-you setup?</span>
+            <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p class="text-gray-400 pt-3 pb-2">I personally configure everything for you: (1) Stripe Connect OAuth setup, (2) Custom dunning email templates with your branding, (3) Smart retry schedule tuned to your business, (4) Slack alert integration, (5) Card update page with your logo, (6) 30-minute onboarding call, (7) 30 days of priority support. You just connect Stripe and I handle the rest. Delivery: 24 hours.</p>
+          </div>
+        </div>
+
+        <div class="faq-item py-5">
+          <button class="flex justify-between items-center w-full text-left" onclick="toggleFaq(this)">
+            <span class="font-semibold text-lg">Do you offer refunds?</span>
+            <svg class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p class="text-gray-400 pt-3 pb-2">If SimpleRecover doesn't recover at least $19 in your first month (equivalent to one month of service), I'll refund your first month. No questions asked. For the $299 setup, if you're not satisfied after the onboarding call, I'll refund 100%.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center bg-dark-800 rounded-2xl border border-white/5 p-8">
+        <h3 class="text-xl font-bold mb-3">Still have questions?</h3>
+        <p class="text-gray-400 mb-4">Email me directly. I read every message and usually respond within an hour.</p>
+        <a href="mailto:komi54666@gmail.com" class="inline-block bg-primary-600 hover:bg-primary-700 px-6 py-3 rounded-xl font-semibold transition">komi54666@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleFaq(btn) {
+      const answer = btn.nextElementSibling;
+      const icon = btn.querySelector('svg');
+      answer.classList.toggle('open');
+      icon.style.transform = answer.classList.contains('open') ? 'rotate(180deg)' : '';
+    }
+  </script>
+</body>
+</html>
