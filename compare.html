@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SimpleRecover vs Churnkey vs Churn Buster — 2026 Comparison</title>
+  <meta name="description" content="Compare SimpleRecover ($19/mo), Churnkey ($250+/mo), and Churn Buster ($249/mo). See which Stripe dunning tool is right for your SaaS.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95' },
+            dark: { 900: '#0f0f23', 800: '#1a1a2e', 700: '#252545' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-bg { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #2d1b69 100%); }
+    .glow { box-shadow: 0 0 60px rgba(139, 92, 246, 0.15); }
+    .check { color: #10b981; }
+    .xmark { color: #ef4444; }
+  </style>
+</head>
+<body class="font-sans antialiased bg-dark-900 text-white min-h-screen gradient-bg">
+  <nav class="fixed w-full z-50 bg-dark-900/80 backdrop-blur-lg border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <a href="index.html" class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-700 to-primary-500 flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <span class="font-bold text-xl">SimpleRecover</span>
+        </a>
+        <a href="pricing.html" class="text-sm text-gray-400 hover:text-white transition">Pricing →</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pt-32 pb-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <span class="inline-block bg-primary-500/10 text-primary-400 text-sm font-semibold px-3 py-1 rounded-full mb-4">2026 Comparison</span>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">SimpleRecover vs The Competition</h1>
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto">See why indie founders are switching from $250+/mo enterprise tools to $19/mo SimpleRecover.</p>
+      </div>
+
+      <!-- Pricing Cards -->
+      <div class="grid md:grid-cols-3 gap-6 mb-12">
+        <div class="bg-dark-800 rounded-2xl border border-primary-500/30 p-6 glow relative">
+          <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary-600 text-white text-xs font-bold px-3 py-1 rounded-full">BEST VALUE</div>
+          <h3 class="text-xl font-bold mb-1">SimpleRecover</h3>
+          <p class="text-sm text-gray-500 mb-4">For indie founders</p>
+          <div class="text-3xl font-bold text-primary-400 mb-1">$19<span class="text-lg text-gray-500 font-normal">/mo</span></div>
+          <p class="text-sm text-gray-500 mb-4">Flat. No usage limits.</p>
+          <a href="signup.html" class="block w-full bg-primary-600 hover:bg-primary-700 py-3 rounded-xl font-semibold text-center transition">Start Free Trial</a>
+        </div>
+
+        <div class="bg-dark-800 rounded-2xl border border-white/5 p-6 opacity-70">
+          <h3 class="text-xl font-bold mb-1">Churnkey</h3>
+          <p class="text-sm text-gray-500 mb-4">Enterprise focus</p>
+          <div class="text-3xl font-bold text-white mb-1">$250+<span class="text-lg text-gray-500 font-normal">/mo</span></div>
+          <p class="text-sm text-gray-500 mb-4">Usage-based pricing</p>
+          <div class="block w-full bg-dark-700 py-3 rounded-xl font-semibold text-center text-gray-500">Enterprise only</div>
+        </div>
+
+        <div class="bg-dark-800 rounded-2xl border border-white/5 p-6 opacity-70">
+          <h3 class="text-xl font-bold mb-1">Churn Buster</h3>
+          <p class="text-sm text-gray-500 mb-4">Agency model</p>
+          <div class="text-3xl font-bold text-white mb-1">$249<span class="text-lg text-gray-500 font-normal">/mo</span></div>
+          <p class="text-sm text-gray-500 mb-4">+ $500 setup fee</p>
+          <div class="block w-full bg-dark-700 py-3 rounded-xl font-semibold text-center text-gray-500">Agency pricing</div>
+        </div>
+      </div>
+
+      <!-- Comparison Table -->
+      <div class="bg-dark-800 rounded-2xl border border-white/5 overflow-hidden">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-white/5">
+              <th class="px-6 py-4 text-gray-400 font-semibold">Feature</th>
+              <th class="px-6 py-4 text-primary-400 font-bold text-center bg-primary-500/5">SimpleRecover</th>
+              <th class="px-6 py-4 text-gray-400 font-semibold text-center">Churnkey</th>
+              <th class="px-6 py-4 text-gray-400 font-semibold text-center">Churn Buster</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm">
+            <tr class="border-b border-white/5">
+              <td class="px-6 py-4 text-gray-300">Monthly Price</td>
+              <td class="px-6 py-4 text-center text-primary-400 font-bold bg-primary-500/5">$19 flat</td>
+              <td class="px-6 py-4 text-center text-gray-400">$250+</td>
+              <td class="px-6 py-4 text-center text-gray-400">$249</td>
+            </tr>
+            <tr class="border-b border-white/5">
+              <td class="px-6 py-4 text-gray-300">Setup Fee</td>
+              <td class="px-6 py-4 text-center text-green-400 font-bold bg-primary-500/5">$0 (self-serve)</td>
+              <td class="px-6 py-4 text-center text-gray-400">Custom</td>
+              <td class="px-6 py-4 text-center text-gray-400">$500</td>
+            </tr>
+            <tr class="border-b border-white/5">
+              <td class="px-6 py-4 text-gray-300">Smart Retry Scheduling</td>
+              <td class="px-6 py-4 text-center bg-primary-500/5"><span class="check">✅</span></td>
+              <td class="px-6 py-4 text-center"><span class="check">✅</span></td>
+              <td class="px-6 py-4 text-center"><span class="check">✅</span></td>
+            </tr>
+            <tr class="border-b border-white/5">
+              <td class="px-6 py-4 text-gray-300">Dunning Email Sequences</td>
+              <td class="px-6 py-4 text-center bg-primary-500/5"><span class="check">✅ 4 emails</span></td>
+              <td class="px-6 py-4 text-center"><span class="check">✅</span></td>
+              <td class="px-6 py-4 text-center"><span class="check">✅</span></td>
+            </tr>
+            <tr class="border-b border-white/5">
+              <td class="px-6 py-4 text-gray-300">One-Click Card Update</td>
+              <td class="px-6 py-4 text-center bg-primary-500/5"><span class="check">✅</span></td>
+              <td class="px-6 py-4 text-center"><span class="check">✅</span></td>
+              <td class="px-6 py-4 text-center"><span class="check">✅</span></td>
+            </tr>
+            <tr class="border-b border-white/5">
+              <td class="px-6 py-4 text-gray-300">Slack Notifications</td>
+              <td class="px-6 py-4 text-center bg-primary-500/5"><span class="check">✅</span></td>
+              <td class="px-6 py-4 text-center"><span class="check">✅</span></td>
+              <td class="px-6 py-4 text-center"><span class="check">✅</span></td>
+            </tr>
+            <tr class="border-b border-white/5">
+              <td class="px-6 py-4 text-gray-300">Custom Email Templates</td>
+              <td class="px-6 py-4 text-center bg-primary-500/5"><span class="check">✅</span></td>
+              <td class="px-6 py-4 text-center"><span class="check">✅</span></td>
+              <td class="px-6 py-4 text-center"><span class="check">✅</span></td>
+            </tr>
+            <tr class="border-b border-white/5">
+              <td class="px-6 py-4 text-gray-300">Recovery Rate</td>
+              <td class="px-6 py-4 text-center text-primary-400 font-bold bg-primary-500/5">60-80%</td>
+              <td class="px-6 py-4 text-center text-gray-400">60-80%</td>
+              <td class="px-6 py-4 text-center text-gray-400">60-80%</td>
+            </tr>
+            <tr class="border-b border-white/5">
+              <td class="px-6 py-4 text-gray-300">Cancel Flow / Retention</td>
+              <td class="px-6 py-4 text-center bg-primary-500/5"><span class="xmark">❌</span></td>
+              <td class="px-6 py-4 text-center"><span class="check">✅</span></td>
+              <td class="px-6 py-4 text-center"><span class="xmark">❌</span></td>
+            </tr>
+            <tr class="border-b border-white/5">
+              <td class="px-6 py-4 text-gray-300">Free Trial</td>
+              <td class="px-6 py-4 text-center text-green-400 font-bold bg-primary-500/5">14 days, no CC</td>
+              <td class="px-6 py-4 text-center text-gray-400">Demo only</td>
+              <td class="px-6 py-4 text-center text-gray-400">14 days</td>
+            </tr>
+            <tr class="border-b border-white/5">
+              <td class="px-6 py-4 text-gray-300">Founder Support</td>
+              <td class="px-6 py-4 text-center text-primary-400 font-bold bg-primary-500/5">Direct email</td>
+              <td class="px-6 py-4 text-center text-gray-400">Support team</td>
+              <td class="px-6 py-4 text-center text-gray-400">Account manager</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 text-gray-300">Best For</td>
+              <td class="px-6 py-4 text-center text-primary-400 font-bold bg-primary-500/5">$2K-$50K MRR</td>
+              <td class="px-6 py-4 text-center text-gray-400">$50K+ MRR</td>
+              <td class="px-6 py-4 text-center text-gray-400">$50K+ MRR</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-12 text-center">
+        <p class="text-gray-400 mb-6">Same recovery rate. 13x cheaper. Built by a founder, for founders.</p>
+        <a href="signup.html" class="inline-block bg-primary-600 hover:bg-primary-700 px-8 py-4 rounded-xl font-semibold text-lg transition">Start Your Free Trial →</a>
+        <p class="text-sm text-gray-500 mt-4">14 days free. No credit card required.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="py-8 text-center text-sm text-gray-500">
+    <p>Built with ❤️‍🔥 by SimpleRecover</p>
+  </footer>
+</body>
+</html>
