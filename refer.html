@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refer a Friend — Get 2 Months Free</title>
+  <meta name="description" content="Refer SimpleRecover to other SaaS founders and get 2 months free for each signup.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: { 400: '#a78bfa', 600: '#7c3aed', 700: '#6d28d9' },
+            dark: { 900: '#0f0f23', 800: '#1a1a2e' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-bg { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%); }
+  </style>
+</head>
+<body class="font-sans antialiased bg-dark-900 text-white min-h-screen gradient-bg">
+  <div class="max-w-2xl mx-auto px-4 py-20">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center mb-4">
+        <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>
+      </div>
+      <h1 class="text-3xl font-bold mb-2">Refer a Friend</h1>
+      <p class="text-gray-400">Get 2 months free for every founder you refer.</p>
+    </div>
+
+    <div class="bg-dark-800 rounded-xl border border-white/5 p-6 mb-6">
+      <h2 class="text-lg font-semibold mb-4">How it works</h2>
+      <div class="space-y-4">
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center shrink-0">
+            <span class="text-primary-400 font-bold">1</span>
+          </div>
+          <div>
+            <p class="font-semibold">Share your link</p>
+            <p class="text-gray-400 text-sm">Copy your unique referral link and share it with other SaaS founders.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center shrink-0">
+            <span class="text-primary-400 font-bold">2</span>
+          </div>
+          <div>
+            <p class="font-semibold">They sign up</p>
+            <p class="text-gray-400 text-sm">When they start a trial and upgrade to Pro, you get credit.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center shrink-0">
+            <span class="text-primary-400 font-bold">3</span>
+          </div>
+          <div>
+            <p class="font-semibold">You get 2 months free</p>
+            <p class="text-gray-400 text-sm">Per referral. No limits. 10 referrals = 20 months free.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-gradient-to-br from-primary-900/50 to-primary-800/30 rounded-xl border border-primary-500/30 p-6 mb-6 text-center">
+      <p class="text-gray-400 text-sm mb-2">Your referral link</p>
+      <div class="bg-dark-900 rounded-lg p-3 border border-white/5 mb-3 flex items-center justify-between">
+        <code class="text-primary-400 text-sm">https://simplerecover.io/?ref=YOUR_ID</code>
+        <button onclick="navigator.clipboard.writeText('https://simplerecover.io/?ref=YOUR_ID'); alert('Copied!')" class="text-xs bg-primary-600 hover:bg-primary-700 px-3 py-1 rounded transition">Copy</button>
+      </div>
+      <p class="text-gray-500 text-xs">Replace YOUR_ID with your customer ID after signup.</p>
+    </div>
+
+    <div class="bg-dark-800 rounded-xl border border-white/5 p-6">
+      <h2 class="text-lg font-semibold mb-4">Referral Stats</h2>
+      <div class="grid grid-cols-3 gap-4 text-center">
+        <div>
+          <p class="text-2xl font-bold text-primary-400" id="ref-clicks">0</p>
+          <p class="text-xs text-gray-500">Clicks</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-green-400" id="ref-signups">0</p>
+          <p class="text-xs text-gray-500">Signups</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-yellow-400" id="ref-credit">0</p>
+          <p class="text-xs text-gray-500">Months Free</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 text-center">
+      <a href="landing/index.html" class="text-gray-500 hover:text-gray-400 text-sm">← Back to Dashboard</a>
+    </div>
+  </div>
+
+  <footer class="py-8 text-center text-sm text-gray-500">
+    <p>Built with ❤️‍🔥 by SimpleRecover</p>
+  </footer>
+</body>
+</html>
