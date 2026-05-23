@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connect Stripe — SimpleRecover</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95' },
+            dark: { 900: '#0f0f23', 800: '#1a1a2e', 700: '#252545' },
+            stripe: { DEFAULT: '#635BFF' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-bg { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #2d1b69 100%); }
+    .glow { box-shadow: 0 0 60px rgba(139, 92, 246, 0.15); }
+  </style>
+</head>
+<body class="font-sans antialiased bg-dark-900 text-white min-h-screen gradient-bg">
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-lg">
+      <div class="text-center mb-8">
+        <div class="flex items-center justify-center gap-2 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-700 to-primary-500 flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <span class="font-bold text-xl">SimpleRecover</span>
+        </div>
+        <h1 class="text-3xl font-bold mb-2">Connect Your Stripe Account</h1>
+        <p class="text-gray-400">One-click OAuth. We only request read access to failed payments and subscription data.</p>
+      </div>
+
+      <div class="bg-dark-800 rounded-2xl border border-white/5 p-8 glow">
+        <div class="space-y-6">
+          <div class="flex items-center gap-4 p-4 bg-dark-900 rounded-xl border border-white/5">
+            <div class="w-12 h-12 bg-[#635BFF] rounded-xl flex items-center justify-center">
+              <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.594-7.305h.003z"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold">Stripe Connect</h3>
+              <p class="text-sm text-gray-400">Secure OAuth connection</p>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span class="text-gray-300 text-sm">Read failed payment data</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span class="text-gray-300 text-sm">Read subscription status</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span class="text-gray-300 text-sm">Create checkout sessions for card updates</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-red-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              <span class="text-gray-300 text-sm">We <strong>cannot</strong> charge your customers or access full card numbers</span>
+            </div>
+          </div>
+
+          <button id="connectBtn" class="w-full bg-[#635BFF] hover:bg-[#5046e5] py-4 rounded-xl font-bold transition flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.594-7.305h.003z"/></svg>
+            Connect with Stripe
+          </button>
+
+          <div id="successState" class="hidden text-center py-4">
+            <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Stripe Connected!</h3>
+            <p class="text-gray-400 mb-4">We're now monitoring your account for failed payments.</p>
+            <a href="/app" class="inline-block bg-primary-600 hover:bg-primary-700 px-6 py-3 rounded-lg font-semibold transition">Go to Dashboard</a>
+          </div>
+        </div>
+
+        <p class="text-center text-sm text-gray-600 mt-6">
+          By connecting, you agree to our <a href="#" class="underline">Terms</a> and Stripe's <a href="#" class="underline">Connected Account Agreement</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('connectBtn').addEventListener('click', function() {
+      // In production, this redirects to Stripe OAuth
+      // For demo, simulate success after 1.5 seconds
+      this.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Connecting...';
+      setTimeout(() => {
+        this.classList.add('hidden');
+        document.getElementById('successState').classList.remove('hidden');
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
