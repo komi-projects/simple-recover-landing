@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gmail SMTP Setup Guide — SimpleRecover</title>
+  <meta name="description" content="How to set up Gmail SMTP for SimpleRecover dunning emails and transactional messages.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: { 400: '#a78bfa', 600: '#7c3aed', 700: '#6d28d9' },
+            dark: { 900: '#0f0f23', 800: '#1a1a2e' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>.gradient-bg { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%); }</style>
+</head>
+<body class="font-sans antialiased bg-dark-900 text-white min-h-screen gradient-bg">
+  <div class="max-w-3xl mx-auto px-4 py-20">
+    <h1 class="text-3xl font-bold mb-2">Gmail SMTP Setup</h1>
+    <p class="text-gray-400 mb-8">Configure Gmail to send dunning emails from SimpleRecover.</p>
+
+    <div class="space-y-6">
+      <!-- Step 1 -->
+      <div class="bg-dark-800 rounded-xl border border-white/5 p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center">
+            <span class="text-primary-400 font-bold">1</span>
+          </div>
+          <h2 class="text-lg font-semibold">Enable 2-Factor Authentication</h2>
+        </div>
+        <p class="text-gray-400">Go to <a href="https://myaccount.google.com/security" class="text-primary-400">Google Account → Security</a> and enable 2-Step Verification. You must have 2FA enabled to use App Passwords.</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="bg-dark-800 rounded-xl border border-white/5 p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center">
+            <span class="text-primary-400 font-bold">2</span>
+          </div>
+          <h2 class="text-lg font-semibold">Generate an App Password</h2>
+        </div>
+        <p class="text-gray-400 mb-3">Go to <a href="https://myaccount.google.com/apppasswords" class="text-primary-400">Google Account → App Passwords</a>:</p>
+        <ul class="text-gray-400 space-y-2 list-disc list-inside">
+          <li>Select app: "Mail"</li>
+          <li>Select device: "Other (Custom name)"</li>
+          <li>Name it: "SimpleRecover"</li>
+          <li>Click "Generate"</li>
+          <li>Copy the 16-character password</li>
+        </ul>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="bg-dark-800 rounded-xl border border-white/5 p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center">
+            <span class="text-primary-400 font-bold">3</span>
+          </div>
+          <h2 class="text-lg font-semibold">Add to .env</h2>
+        </div>
+        <p class="text-gray-400 mb-3">Add these lines to your backend .env file:</p>
+        <pre class="bg-dark-900 rounded-lg p-4 border border-white/5 text-sm text-primary-400 overflow-x-auto">SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=komi54666@gmail.com
+SMTP_PASS=your-app-password-here</pre>
+        <p class="text-gray-500 text-sm mt-3">⚠️ Never commit .env to git. It's already in .gitignore.</p>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="bg-dark-800 rounded-xl border border-white/5 p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center">
+            <span class="text-primary-400 font-bold">4</span>
+          </div>
+          <h2 class="text-lg font-semibold">Test It</h2>
+        </div>
+        <p class="text-gray-400 mb-3">Run the test script:</p>
+        <pre class="bg-dark-900 rounded-lg p-4 border border-white/5 text-sm text-primary-400">cd simplerecover/backend
+node test-smtp.js</pre>
+        <p class="text-gray-400 mt-3">If you see "✅ Email sent successfully", you're good to go.</p>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="bg-dark-800 rounded-xl border border-white/5 p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center">
+            <span class="text-primary-400 font-bold">5</span>
+          </div>
+          <h2 class="text-lg font-semibold">Gmail Sending Limits</h2>
+        </div>
+        <ul class="text-gray-400 space-y-2 list-disc list-inside">
+          <li><strong>500 emails/day</strong> for Gmail accounts</li>
+          <li><strong>100 recipients/email</strong> maximum</li>
+          <li>Rate limit: ~1 email/second recommended</li>
+          <li>For higher volume, upgrade to Google Workspace ($6/mo)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-8 text-center">
+      <a href="index.html" class="text-primary-400 hover:text-primary-300">← Back to Portfolio</a>
+    </div>
+  </div>
+
+  <footer class="py-8 text-center text-sm text-gray-500">
+    <p>Built with ❤️‍🔥 by SimpleRecover</p>
+  </footer>
+</body>
+</html>
