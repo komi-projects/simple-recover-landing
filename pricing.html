@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing — SimpleRecover</title>
+  <meta name="description" content="SimpleRecover pricing: $19/month flat. No revenue share. No MRR-based pricing. Start recovering failed payments today.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
+            dark: { 850: '#1a1625', 900: '#0f0c15', 950: '#08060c' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #08060c; }
+    .gradient-text {
+      background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 50%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gradient-border {
+      background: linear-gradient(135deg, #7c3aed, #c4b5fd, #8b5cf6);
+      padding: 1px;
+      border-radius: 1rem;
+    }
+    .gradient-border-inner {
+      background: #0f0c15;
+      border-radius: calc(1rem - 1px);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(124, 58, 237, 0.4);
+    }
+    .btn-secondary {
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      transition: all 0.3s ease;
+    }
+    .btn-secondary:hover {
+      border-color: #7c3aed;
+      background: rgba(124, 58, 237, 0.1);
+    }
+    .nav-blur {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .check-item { display: flex; align-items: center; gap: 0.75rem; }
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease-out;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .savings-tag {
+      background: linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(16, 185, 129, 0.05));
+      border: 1px solid rgba(52, 211, 153, 0.2);
+    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #08060c; }
+    ::-webkit-scrollbar-thumb { background: #4c1d95; border-radius: 4px; }
+  </style>
+</head>
+<body class="text-gray-300 antialiased">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 nav-blur bg-dark-950/80 border-b border-primary-900/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html" class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </div>
+          <span class="text-white font-bold text-lg tracking-tight">SimpleRecover</span>
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="index.html#problem" class="text-sm text-gray-400 hover:text-white transition-colors">Problem</a>
+          <a href="index.html#solution" class="text-sm text-gray-400 hover:text-white transition-colors">Solution</a>
+          <a href="pricing.html" class="text-sm text-white font-medium">Pricing</a>
+          <a href="index.html#comparison" class="text-sm text-gray-400 hover:text-white transition-colors">Compare</a>
+        </div>
+        <a href="signup.html" class="btn-primary text-white px-5 py-2 rounded-lg text-sm font-semibold">Start Trial</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Pricing Hero -->
+  <section class="pt-32 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="text-primary-400 text-sm font-semibold uppercase tracking-wider">Pricing</span>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mt-4 mb-6">
+        Simple Pricing,<br><span class="gradient-text">Serious Results</span>
+      </h1>
+      <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-4">
+        One plan. Every feature. No tiers that force you to "upgrade" for basics.
+      </p>
+      <div class="flex items-center justify-center gap-2 text-emerald-400 text-sm font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        14-day free trial • No credit card • Cancel anytime
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Cards -->
+  <section class="pb-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        
+        <!-- Monthly -->
+        <div class="gradient-border rounded-2xl reveal">
+          <div class="gradient-border-inner rounded-2xl p-8 lg:p-10">
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-white mb-1">Monthly</h3>
+              <p class="text-gray-500 text-sm">Pay as you go, cancel anytime</p>
+            </div>
+            
+            <div class="mb-8">
+              <div class="flex items-baseline gap-1">
+                <span class="text-5xl font-bold text-white">$19</span>
+                <span class="text-gray-500">/month</span>
+              </div>
+              <p class="text-sm text-gray-500 mt-2">Billed monthly</p>
+            </div>
+            
+            <a href="signup.html" class="btn-secondary block text-center text-white px-8 py-3 rounded-xl font-semibold mb-8">
+              Start Monthly Plan
+            </a>
+            
+            <ul class="space-y-3 text-sm">
+              <li class="check-item text-gray-400">
+                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Everything in SimpleRecover
+              </li>
+              <li class="check-item text-gray-400">
+                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Unlimited recoveries
+              </li>
+              <li class="check-item text-gray-400">
+                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Full email support
+              </li>
+              <li class="check-item text-gray-400">
+                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Cancel anytime
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Yearly (Popular) -->
+        <div class="gradient-border rounded-2xl relative reveal">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+            <span class="bg-emerald-500 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">Best Value — Save 2 Months</span>
+          </div>
+          <div class="gradient-border-inner rounded-2xl p-8 lg:p-10">
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-white mb-1">Yearly</h3>
+              <p class="text-gray-500 text-sm">Commit and save</p>
+            </div>
+            
+            <div class="mb-8">
+              <div class="flex items-baseline gap-1">
+                <span class="text-5xl font-bold text-white">$190</span>
+                <span class="text-gray-500">/year</span>
+              </div>
+              <div class="flex items-center gap-2 mt-2">
+                <span class="text-sm text-gray-500 line-through">$228</span>
+                <span class="savings-tag text-emerald-400 text-sm font-medium px-2 py-0.5 rounded-full">Save $38</span>
+              </div>
+            </div>
+            
+            <a href="signup.html?plan=yearly" class="btn-primary block text-center text-white px-8 py-3 rounded-xl font-semibold mb-8">
+              Start Yearly Plan
+            </a>
+            
+            <ul class="space-y-3 text-sm">
+              <li class="check-item text-gray-400">
+                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Everything in SimpleRecover
+              </li>
+              <li class="check-item text-gray-400">
+                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Unlimited recoveries
+              </li>
+              <li class="check-item text-gray-400">
+                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Priority email support
+              </li>
+              <li class="check-item text-gray-400">
+                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                2 months free
+              </li>
+              <li class="check-item text-gray-400">
+                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Early access to new features
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Competitive Comparison -->
+  <section class="py-16 bg-dark-900/50">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <h2 class="text-3xl font-bold text-white mb-4">How We Compare</h2>
+        <p class="text-gray-400">See why indie founders choose SimpleRecover over enterprise tools.</p>
+      </div>
+      
+      <div class="overflow-x-auto reveal">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-gray-800">
+              <th class="py-4 pr-4 text-gray-400 font-medium">Feature</th>
+              <th class="py-4 px-4 text-emerald-400 font-semibold">SimpleRecover</th>
+              <th class="py-4 px-4 text-gray-400 font-medium">ChurnWard</th>
+              <th class="py-4 px-4 text-gray-400 font-medium">Churnkey</th>
+              <th class="py-4 px-4 text-gray-400 font-medium">Churn Buster</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm">
+            <tr class="border-b border-gray-800/50">
+              <td class="py-4 pr-4 text-white">Monthly Price</td>
+              <td class="py-4 px-4 text-emerald-400 font-bold">$19/mo</td>
+              <td class="py-4 px-4 text-gray-400">$29/mo</td>
+              <td class="py-4 px-4 text-gray-400">$250+/mo</td>
+              <td class="py-4 px-4 text-gray-400">$249/mo</td>
+            </tr>
+            <tr class="border-b border-gray-800/50">
+              <td class="py-4 pr-4 text-white">Revenue Share</td>
+              <td class="py-4 px-4 text-emerald-400">None</td>
+              <td class="py-4 px-4 text-gray-400">None</td>
+              <td class="py-4 px-4 text-gray-400">1-4%</td>
+              <td class="py-4 px-4 text-gray-400">None</td>
+            </tr>
+            <tr class="border-b border-gray-800/50">
+              <td class="py-4 pr-4 text-white">Setup Time</td>
+              <td class="py-4 px-4 text-emerald-400">5 minutes</td>
+              <td class="py-4 px-4 text-gray-400">10 minutes</td>
+              <td class="py-4 px-4 text-gray-400">1-2 hours</td>
+              <td class="py-4 px-4 text-gray-400">1-2 hours</td>
+            </tr>
+            <tr class="border-b border-gray-800/50">
+              <td class="py-4 pr-4 text-white">Target Market</td>
+              <td class="py-4 px-4 text-emerald-400">Indie SaaS $2K-50K</td>
+              <td class="py-4 px-4 text-gray-400">Indie SaaS</td>
+              <td class="py-4 px-4 text-gray-400">Enterprise</td>
+              <td class="py-4 px-4 text-gray-400">Ecom/SaaS</td>
+            </tr>
+            <tr class="border-b border-gray-800/50">
+              <td class="py-4 pr-4 text-white">Smart Retries</td>
+              <td class="py-4 px-4 text-emerald-400">✓ Decline-code aware</td>
+              <td class="py-4 px-4 text-gray-400">✓</td>
+              <td class="py-4 px-4 text-gray-400">✓</td>
+              <td class="py-4 px-4 text-gray-400">✓</td>
+            </tr>
+            <tr class="border-b border-gray-800/50">
+              <td class="py-4 pr-4 text-white">Email Dunning</td>
+              <td class="py-4 px-4 text-emerald-400">✓ 4-touch sequence</td>
+              <td class="py-4 px-4 text-gray-400">✓</td>
+              <td class="py-4 px-4 text-gray-400">✓ + cancel flows</td>
+              <td class="py-4 px-4 text-gray-400">✓</td>
+            </tr>
+            <tr class="border-b border-gray-800/50">
+              <td class="py-4 pr-4 text-white">Pre-dunning</td>
+              <td class="py-4 px-4 text-emerald-400">✓ Card expiry alerts</td>
+              <td class="py-4 px-4 text-gray-400">✓</td>
+              <td class="py-4 px-4 text-gray-400">✓</td>
+              <td class="py-4 px-4 text-gray-400">✓</td>
+            </tr>
+            <tr class="border-b border-gray-800/50">
+              <td class="py-4 pr-4 text-white">Done-for-You Setup</td>
+              <td class="py-4 px-4 text-emerald-400">✓ $299 optional</td>
+              <td class="py-4 px-4 text-gray-400">✗</td>
+              <td class="py-4 px-4 text-gray-400">✗</td>
+              <td class="py-4 px-4 text-gray-400">✗</td>
+            </tr>
+            <tr class="border-b border-gray-800/50">
+              <td class="py-4 pr-4 text-white">Cancel Flows</td>
+              <td class="py-4 px-4 text-gray-400">✗ (focused on recovery)</td>
+              <td class="py-4 px-4 text-gray-400">✗</td>
+              <td class="py-4 px-4 text-emerald-400">✓ Advanced</td>
+              <td class="py-4 px-4 text-gray-400">✗</td>
+            </tr>
+            <tr>
+              <td class="py-4 pr-4 text-white">Free Trial</td>
+              <td class="py-4 px-4 text-emerald-400">✓ 14 days, no CC</td>
+              <td class="py-4 px-4 text-gray-400">Unknown</td>
+              <td class="py-4 px-4 text-gray-400">Enterprise demo</td>
+              <td class="py-4 px-4 text-gray-400">✓ 14 days</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="mt-8 text-center reveal">
+        <p class="text-sm text-gray-500">
+          Prices and features based on public information as of May 2026. 
+          <a href="#" class="text-primary-400 hover:underline">Report inaccuracies</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Breakdown -->
+  <section class="py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <h2 class="text-3xl font-bold text-white mb-4">What's Included</h2>
+        <p class="text-gray-400">Every plan gets everything. We don't gate features behind paywalls.</p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-x-12 gap-y-6 reveal">
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-white font-medium mb-1">Smart Retry Engine</h4>
+            <p class="text-sm text-gray-500">Up to 8 retry attempts with decline-code-aware timing, weekend skipping, and optimized backoff curves.</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-white font-medium mb-1">Dunning Email Sequences</h4>
+            <p class="text-sm text-gray-500">5-email sequence with customizable copy, sender identity, and send timing. 42% average open rate.</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-white font-medium mb-1">Card Update Pages</h4>
+            <p class="text-sm text-gray-500">Branded, mobile-optimized pages where customers update expired cards in seconds — no login required.</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-white font-medium mb-1">Recovery Dashboard</h4>
+            <p class="text-sm text-gray-500">Real-time metrics: recovery rate, revenue recovered, active failures, and trend charts.</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-white font-medium mb-1">Slack & Email Alerts</h4>
+            <p class="text-sm text-gray-500">Get notified when recoveries happen, when sequences complete, or when action is needed.</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-white font-medium mb-1">API & Webhooks</h4>
+            <p class="text-sm text-gray-500">REST API and outgoing webhooks to integrate recovery data into your own systems.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROI Calculator -->
+  <section class="py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="gradient-border rounded-2xl reveal">
+        <div class="gradient-border-inner rounded-2xl p-8 lg:p-10">
+          <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-white mb-2">Your ROI at a Glance</h2>
+            <p class="text-gray-500">Based on our customers' average 64% recovery rate</p>
+          </div>
+          
+          <div class="space-y-6">
+            <div class="grid grid-cols-3 gap-4 text-center">
+              <div class="p-4 bg-dark-850 rounded-xl">
+                <div class="text-2xl font-bold text-white">$5K</div>
+                <div class="text-xs text-gray-500 mt-1">MRR</div>
+                <div class="text-sm text-emerald-400 mt-2">~$288/mo recovered</div>
+                <div class="text-xs text-gray-600">ROI: 15x</div>
+              </div>
+              <div class="p-4 bg-dark-850 rounded-xl border border-primary-700/20">
+                <div class="text-2xl font-bold gradient-text">$20K</div>
+                <div class="text-xs text-gray-500 mt-1">MRR</div>
+                <div class="text-sm text-emerald-400 mt-2">~$1,152/mo recovered</div>
+                <div class="text-xs text-gray-600">ROI: 61x</div>
+              </div>
+              <div class="p-4 bg-dark-850 rounded-xl">
+                <div class="text-2xl font-bold text-white">$50K</div>
+                <div class="text-xs text-gray-500 mt-1">MRR</div>
+                <div class="text-sm text-emerald-400 mt-2">~$2,880/mo recovered</div>
+                <div class="text-xs text-gray-600">ROI: 152x</div>
+              </div>
+            </div>
+            
+            <div class="p-4 bg-primary-900/20 rounded-xl border border-primary-700/20 text-center">
+              <p class="text-sm text-primary-300">
+                At <strong>$20K MRR</strong>, SimpleRecover costs $228/year and recovers ~$13,824/year in failed payments.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-16">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10 reveal">
+        <h2 class="text-2xl font-bold text-white">Pricing FAQ</h2>
+      </div>
+      
+      <div class="space-y-4 reveal">
+        <details class="bg-dark-850 rounded-xl border border-primary-900/20 overflow-hidden group">
+          <summary class="px-6 py-4 cursor-pointer flex items-center justify-between text-white font-medium hover:bg-primary-900/10 transition-colors">
+            <span>Why is this so cheap compared to competitors?</span>
+            <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="px-6 pb-4 text-gray-400">
+            We're a lean team building for indie founders. No enterprise sales team, no fancy offices, no VC pressure to maximize revenue per user. We priced it at what we think is fair — and what we'd pay ourselves.
+          </div>
+        </details>
+        
+        <details class="bg-dark-850 rounded-xl border border-primary-900/20 overflow-hidden group">
+          <summary class="px-6 py-4 cursor-pointer flex items-center justify-between text-white font-medium hover:bg-primary-900/10 transition-colors">
+            <span>Will you raise prices as we grow?</span>
+            <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="px-6 pb-4 text-gray-400">
+            No. $19/mo is flat forever for existing customers. If we ever introduce new tiers, you'll stay on your current plan at the same price. We hate surprise pricing as much as you do.
+          </div>
+        </details>
+        
+        <details class="bg-dark-850 rounded-xl border border-primary-900/20 overflow-hidden group">
+          <summary class="px-6 py-4 cursor-pointer flex items-center justify-between text-white font-medium hover:bg-primary-900/10 transition-colors">
+            <span>What if I have multiple Stripe accounts?</span>
+            <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="px-6 pb-4 text-gray-400">
+            One SimpleRecover account supports multiple Stripe accounts. No extra charge per account. Manage all your products' dunning from one dashboard.
+          </div>
+        </details>
+        
+        <details class="bg-dark-850 rounded-xl border border-primary-900/20 overflow-hidden group">
+          <summary class="px-6 py-4 cursor-pointer flex items-center justify-between text-white font-medium hover:bg-primary-900/10 transition-colors">
+            <span>Can I get a refund?</span>
+            <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="px-6 pb-4 text-gray-400">
+            If SimpleRecover doesn't recover at least $19 in your first month, we'll refund you no questions asked. We're confident you'll see value immediately.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+      <div class="gradient-border rounded-2xl">
+        <div class="gradient-border-inner rounded-2xl p-10">
+          <h2 class="text-3xl font-bold text-white mb-4">Ready to stop losing revenue?</h2>
+          <p class="text-gray-400 mb-8">14-day free trial. No credit card. See your first recoveries within hours.</p>
+          <a href="signup.html" class="btn-primary inline-flex items-center gap-2 text-white px-8 py-4 rounded-xl text-lg font-semibold">
+            Start Free Trial
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-primary-900/20 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <a href="index.html" class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </div>
+          <span class="text-white font-bold text-lg">SimpleRecover</span>
+        </a>
+        <p class="text-sm text-gray-600"> 2026 SimpleRecover. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
