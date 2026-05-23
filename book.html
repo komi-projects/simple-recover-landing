@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Your Setup — SimpleRecover</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95' },
+            dark: { 900: '#0f0f23', 800: '#1a1a2e', 700: '#252545' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-bg { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #2d1b69 100%); }
+    .glow { box-shadow: 0 0 60px rgba(139, 92, 246, 0.15); }
+  </style>
+</head>
+<body class="font-sans antialiased bg-dark-900 text-white min-h-screen gradient-bg">
+  <nav class="fixed w-full z-50 bg-dark-900/80 backdrop-blur-lg border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <a href="index.html" class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-700 to-primary-500 flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <span class="font-bold text-xl">SimpleRecover</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pt-32 pb-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <span class="inline-block bg-yellow-500/10 text-yellow-400 text-sm font-semibold px-3 py-1 rounded-full mb-4">Done-For-You Service</span>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Book Your Stripe Dunning Setup</h1>
+        <p class="text-xl text-gray-400">$299 one-time. 48-hour delivery. You get the configuration, I get nothing ongoing.</p>
+      </div>
+
+      <div class="grid md:grid-cols-5 gap-8">
+        <!-- Left: Form -->
+        <div class="md:col-span-3 bg-dark-800 rounded-2xl border border-white/5 p-8 glow">
+          <form id="bookingForm" class="space-y-6">
+            <div>
+              <label class="block text-sm font-medium mb-2">Your Name</label>
+              <input type="text" id="name" required class="w-full bg-dark-900 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary-500 transition" placeholder="Jake Smith">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-2">Email</label>
+              <input type="email" id="email" required class="w-full bg-dark-900 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary-500 transition" placeholder="founder@yourstartup.com">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-2">Your SaaS Website</label>
+              <input type="url" id="website" required class="w-full bg-dark-900 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary-500 transition" placeholder="https://yourstartup.com">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-2">Current MRR</label>
+                <select id="mrr" class="w-full bg-dark-900 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary-500 transition">
+                  <option value="0-1k">$0 - $1K</option>
+                  <option value="1k-5k">$1K - $5K</option>
+                  <option value="5k-10k" selected>$5K - $10K</option>
+                  <option value="10k-50k">$10K - $50K</option>
+                  <option value="50k+">$50K+</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">Stripe Monthly Volume</label>
+                <input type="text" id="volume" class="w-full bg-dark-900 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary-500 transition" placeholder="~$8,000/mo">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-2">Current Dunning Setup</label>
+              <select id="currentSetup" class="w-full bg-dark-900 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary-500 transition">
+                <option value="nothing">Nothing — using Stripe default only</option>
+                <option value="churnkey">Churnkey</option>
+                <option value="churnbuster">Churn Buster</option>
+                <option value="stunning">Stunning</option>
+                <option value="custom">Custom / DIY</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-2">Anything else I should know?</label>
+              <textarea id="notes" rows="3" class="w-full bg-dark-900 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary-500 transition" placeholder="Special billing setup, multiple Stripe accounts, etc."></textarea>
+            </div>
+
+            <div class="bg-primary-500/10 rounded-xl p-4 border border-primary-500/20">
+              <p class="text-sm text-primary-300 mb-2">What happens after booking:</p>
+              <ol class="text-sm text-gray-400 space-y-1 list-decimal list-inside">
+                <li>You pay $299 via Stripe Checkout</li>
+                <li>I email you within 2 hours to confirm</li>
+                <li>You grant read-only Stripe access</li>
+                <li>I configure everything within 48 hours</li>
+                <li>You review + approve, then I remove access</li>
+              </ol>
+            </div>
+
+            <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 py-4 rounded-xl font-bold text-lg transition">
+              Pay $299 & Book Setup →
+            </button>
+          </form>
+
+          <div id="bookingSuccess" class="hidden text-center py-8">
+            <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Booking Confirmed!</h3>
+            <p class="text-gray-400 mb-4">You'll receive a confirmation email within 2 hours with next steps for Stripe access.</p>
+            <a href="index.html" class="inline-block bg-dark-700 hover:bg-dark-600 px-6 py-3 rounded-lg font-semibold transition">Back to Home</a>
+          </div>
+        </div>
+
+        <!-- Right: Details -->
+        <div class="md:col-span-2 space-y-6">
+          <div class="bg-dark-800 rounded-2xl border border-white/5 p-6">
+            <h3 class="font-semibold mb-4">What's Included</h3>
+            <ul class="space-y-3 text-sm text-gray-400">
+              <li class="flex items-start gap-2"><svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Complete Stripe dunning audit</li>
+              <li class="flex items-start gap-2"><svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Smart retry schedule config</li>
+              <li class="flex items-start gap-2"><svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> 4 custom email templates</li>
+              <li class="flex items-start gap-2"><svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> One-click card update pages</li>
+              <li class="flex items-start gap-2"><svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Webhook testing & verification</li>
+              <li class="flex items-start gap-2"><svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Handoff documentation</li>
+              <li class="flex items-start gap-2"><svg class="w-5 h-5 text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> 30-day email support</li>
+            </ul>
+          </div>
+
+          <div class="bg-dark-800 rounded-2xl border border-white/5 p-6">
+            <h3 class="font-semibold mb-4">FAQ</h3>
+            <div class="space-y-4 text-sm">
+              <div>
+                <p class="font-medium text-white">How long does it take?</p>
+                <p class="text-gray-400">48 hours from Stripe access. Most setups are done in 24 hours.</p>
+              </div>
+              <div>
+                <p class="font-medium text-white">Do I need to give you admin access?</p>
+                <p class="text-gray-400">No. Read-only access is enough. You can revoke it immediately after.</p>
+              </div>
+              <div>
+                <p class="font-medium text-white">What if I'm not satisfied?</p>
+                <p class="text-gray-400">Full refund if I can't improve your setup. No questions asked.</p>
+              </div>
+              <div>
+                <p class="font-medium text-white">Can I upgrade to the SaaS later?</p>
+                <p class="text-gray-400">Yes. Setup customers get 3 months free on the SaaS plan.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-dark-800/50 rounded-2xl border border-white/5 p-6 text-center">
+            <p class="text-sm text-gray-400 mb-2">Prefer to DIY?</p>
+            <a href="signup.html" class="text-primary-400 hover:text-primary-300 font-medium">Try the $19/mo SaaS →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      this.classList.add('hidden');
+      document.getElementById('bookingSuccess').classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
