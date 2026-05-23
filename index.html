@@ -1,1179 +1,1255 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SimpleRecover — Stripe-Native Dunning for Indie SaaS</title>
-  <meta name="description" content="Recover 60-80% of failed SaaS payments with SimpleRecover. Flat $19/mo. No revenue share. No MRR-based pricing. Stripe-native dunning built for indie founders.">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065' },
-            dark: { 850: '#1a1625', 900: '#0f0c15', 950: '#08060c' }
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-            display: ['Cal Sans', 'Inter', 'system-ui', 'sans-serif']
-          },
-          animation: {
-            'float': 'float 6s ease-in-out infinite',
-            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'slide-up': 'slideUp 0.6s ease-out forwards',
-          },
-          keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-20px)' },
-            },
-            slideUp: {
-              '0%': { opacity: '0', transform: 'translateY(30px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' },
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimpleRecover — Recover Failed Stripe Payments Automatically</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface-light: #1a1a25;
+            --text: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --accent-glow: rgba(99, 102, 241, 0.3);
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--text);
+        }
+        
+        .btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 40px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--accent-light);
+            margin-bottom: 32px;
+        }
+        
+        .badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+        
+        .gradient-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 48px;
+        }
+        
+        .hero-buttons .btn {
+            padding: 16px 32px;
+            font-size: 1.1rem;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 48px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        
+        /* Problem Section */
+        .section {
+            padding: 120px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 80px;
+        }
+        
+        .section-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-light);
+            margin-bottom: 16px;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        
+        .problem-card {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 40px;
+            transition: all 0.3s;
+        }
+        
+        .problem-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px);
+        }
+        
+        .problem-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+        }
+        
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+        }
+        
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .problem-stat {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .problem-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--danger);
+        }
+        
+        .problem-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+        
+        /* Solution Section */
+        .solution-section {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 80px;
+            margin: 0 40px;
+        }
+        
+        .steps {
+            display: flex;
+            gap: 32px;
+            margin-top: 60px;
+        }
+        
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            right: -16px;
+            width: 32px;
+            height: 2px;
+            background: rgba(99, 102, 241, 0.3);
+        }
+        
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 24px;
+            box-shadow: 0 8px 32px var(--accent-glow);
+        }
+        
+        .step h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+        }
+        
+        .step p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* Pricing Section */
+        .pricing-section {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 80px;
+            margin: 0 40px;
+        }
+        
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        
+        .pricing-card {
+            background: var(--surface-light);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 40px 32px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .pricing-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px);
+        }
+        
+        .pricing-card.popular {
+            border-color: var(--accent);
+            box-shadow: 0 8px 32px var(--accent-glow);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .pricing-desc {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 24px;
+        }
+        
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin: 24px 0;
+        }
+        
+        .pricing-features li {
+            padding: 8px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+        
+        .pricing-features li.disabled {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+        
+        .pricing-features li.disabled::before {
+            content: '×';
+            color: var(--text-muted);
+        }
+        
+        .pricing-card .btn {
+            width: 100%;
+            text-align: center;
+        }
+        
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        
+        .testimonial-card {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 32px;
+        }
+        
+        .testimonial-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            color: var(--text-secondary);
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .testimonial-avatar {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .testimonial-name {
+            font-weight: 600;
+        }
+        
+        .testimonial-role {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+        
+        /* FAQ */
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .faq-question {
+            padding: 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+        
+        .faq-question:hover {
+            color: var(--accent-light);
+        }
+        
+        .faq-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+        }
+        
+        .faq-answer p {
+            padding-bottom: 24px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 120px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .cta-section h2 {
+            font-size: 3.5rem;
+            margin-bottom: 24px;
+        }
+        
+        .cta-section p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 60px 40px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+        
+        .footer-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .footer-links h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+        
+        .footer-links a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 6px 0;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--text);
+        }
+        
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .problem-grid,
+            .features-grid,
+            .testimonials-grid,
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
-          }
+            
+            .steps {
+                flex-direction: column;
+            }
+            
+            .step:not(:last-child)::after {
+                display: none;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
         }
-      }
-    }
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-    
-    body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: #08060c;
-    }
-    
-    .gradient-text {
-      background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 50%, #8b5cf6 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .gradient-bg {
-      background: linear-gradient(135deg, #1a1625 0%, #0f0c15 50%, #08060c 100%);
-    }
-    
-    .gradient-border {
-      background: linear-gradient(135deg, #7c3aed, #c4b5fd, #8b5cf6);
-      padding: 1px;
-      border-radius: 0.75rem;
-    }
-    
-    .gradient-border-inner {
-      background: #0f0c15;
-      border-radius: calc(0.75rem - 1px);
-    }
-    
-    .hero-glow {
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      pointer-events: none;
-    }
-    
-    .card-glow {
-      box-shadow: 0 0 40px rgba(124, 58, 237, 0.1);
-    }
-    
-    .btn-primary {
-      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-      transition: all 0.3s ease;
-    }
-    
-    .btn-primary:hover {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px rgba(124, 58, 237, 0.4);
-    }
-    
-    .feature-icon {
-      background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(167, 139, 250, 0.1) 100%);
-    }
-    
-    .nav-blur {
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-    
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.6s ease-out;
-    }
-    
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .comparison-row:hover {
-      background: rgba(124, 58, 237, 0.05);
-    }
-    
-    .check-green { color: #34d399; }
-    .check-red { color: #f87171; }
-    
-    .demo-frame {
-      background: linear-gradient(145deg, #1a1625, #0f0c15);
-      border: 1px solid rgba(124, 58, 237, 0.2);
-    }
-    
-    .metric-card {
-      background: rgba(124, 58, 237, 0.05);
-      border: 1px solid rgba(124, 58, 237, 0.15);
-    }
-    
-    .metric-card:hover {
-      border-color: rgba(124, 58, 237, 0.3);
-      background: rgba(124, 58, 237, 0.08);
-    }
-    
-    .testimonial-card {
-      background: rgba(15, 12, 21, 0.8);
-      border: 1px solid rgba(124, 58, 237, 0.1);
-    }
-    
-    /* Smooth scroll behavior */
-    html { scroll-behavior: smooth; }
-    
-    /* Custom scrollbar */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #08060c; }
-    ::-webkit-scrollbar-thumb { background: #4c1d95; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #5b21b6; }
-  </style>
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 24px;
+            }
+            
+            .problem-grid,
+            .features-grid,
+            .testimonials-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-section,
+            .solution-section {
+                margin: 0 20px;
+                padding: 40px 24px;
+            }
+            
+            .section {
+                padding: 80px 20px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
-<body class="text-gray-300 antialiased">
-  
-  <!-- Navigation -->
-  <nav class="fixed top-0 left-0 right-0 z-50 nav-blur bg-dark-950/80 border-b border-primary-900/20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <a href="index.html" class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-            </svg>
-          </div>
-          <span class="text-white font-bold text-lg tracking-tight">SimpleRecover</span>
-        </a>
-        
-        <div class="hidden md:flex items-center gap-8">
-          <a href="#problem" class="text-sm text-gray-400 hover:text-white transition-colors">Problem</a>
-          <a href="#solution" class="text-sm text-gray-400 hover:text-white transition-colors">Solution</a>
-          <a href="#pricing" class="text-sm text-gray-400 hover:text-white transition-colors">Pricing</a>
-          <a href="#comparison" class="text-sm text-gray-400 hover:text-white transition-colors">Compare</a>
-          <a href="pricing.html" class="text-sm text-gray-400 hover:text-white transition-colors">Plans</a>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">SimpleRecover</div>
+        <div class="nav-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#faq">FAQ</a>
+            <a href="#cta" class="btn btn-primary">Start Free Trial</a>
         </div>
-        
-        <div class="flex items-center gap-4">
-          <a href="signup.html" class="hidden sm:inline-flex btn-primary text-white px-5 py-2 rounded-lg text-sm font-semibold">
-            Start Free Trial
-          </a>
-          <button id="mobile-menu-btn" class="md:hidden text-gray-400 hover:text-white">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden md:hidden bg-dark-950/95 border-b border-primary-900/20">
-      <div class="px-4 py-4 space-y-3">
-        <a href="#problem" class="block text-gray-400 hover:text-white">Problem</a>
-        <a href="#solution" class="block text-gray-400 hover:text-white">Solution</a>
-        <a href="#pricing" class="block text-gray-400 hover:text-white">Pricing</a>
-        <a href="#comparison" class="block text-gray-400 hover:text-white">Compare</a>
-        <a href="pricing.html" class="block text-gray-400 hover:text-white">Plans</a>
-        <a href="signup.html" class="block btn-primary text-white px-4 py-2 rounded-lg text-center font-semibold">Start Free Trial</a>
-      </div>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- Hero Section -->
-  <section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
-    <div class="hero-glow"></div>
-    
-    <!-- Background grid pattern -->
-    <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #a78bfa 1px, transparent 1px); background-size: 50px 50px;"></div>
-    
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-      <div class="text-center max-w-4xl mx-auto">
-        <!-- Badge -->
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-900/30 border border-primary-700/30 mb-8 reveal">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-sm text-primary-300 font-medium">Now in public beta — 14-day free trial</span>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span class="dot"></span>
+                Now recovering $2.4M+ in failed payments monthly
+            </div>
+            <h1>
+                Recover failed<br>
+                <span class="gradient-text">Stripe payments</span><br>
+                automatically
+            </h1>
+            <p class="hero-subtitle">
+                SimpleRecover detects failed payments, retries with smart logic, 
+                and sends dunning emails — recovering 40-60% of lost revenue 
+                without engineering work.
+            </p>
+            <div class="hero-buttons">
+                <a href="#cta" class="btn btn-primary">Start Free Trial — 14 Days</a>
+                <a href="#solution" class="btn btn-secondary">See How It Works</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">52%</div>
+                    <div class="stat-label">Avg Recovery Rate</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">10min</div>
+                    <div class="stat-label">Setup Time</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">89K</div>
+                    <div class="stat-label">$ Recovered This Month</div>
+                </div>
+            </div>
         </div>
-        
-        <!-- Headline -->
-        <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight mb-6 reveal" style="animation-delay: 0.1s">
-          Stop Losing Revenue to <span class="gradient-text">Failed Payments</span>
-        </h1>
-        
-        <!-- Subheadline -->
-        <p class="text-lg sm:text-xl lg:text-2xl text-gray-400 mb-4 max-w-3xl mx-auto leading-relaxed reveal" style="animation-delay: 0.2s">
-          Recover <span class="text-white font-semibold">60–80%</span> with Stripe-native dunning. 
-          <span class="text-emerald-400 font-semibold">$19/mo flat</span> — 34% cheaper than the new indie competitor.
-        </p>
-        
-        <p class="text-base text-gray-500 mb-10 max-w-2xl mx-auto reveal" style="animation-delay: 0.3s">
-          No revenue share. No MRR-based pricing. No enterprise sales calls. ChurnWard charges $29/mo for the same features. 
-          Connect Stripe in 5 minutes and start recovering failed payments automatically.
-        </p>
-        
-        <!-- CTA Buttons -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 reveal" style="animation-delay: 0.4s">
-          <a href="signup.html" class="btn-primary text-white px-8 py-4 rounded-xl text-lg font-semibold inline-flex items-center gap-2">
-            Start Recovering Revenue
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
-          </a>
-          <a href="#demo" class="px-8 py-4 rounded-xl text-lg font-semibold text-gray-300 border border-gray-700 hover:border-primary-500 hover:text-white transition-all inline-flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            See How It Works
-          </a>
-        </div>
-        
-        <!-- Social Proof -->
-        <div class="flex items-center justify-center gap-6 text-sm text-gray-500 reveal" style="animation-delay: 0.5s">
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-            </svg>
-            <span>Stripe-verified partner</span>
-          </div>
-          <div class="w-1 h-1 rounded-full bg-gray-700"></div>
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-            </svg>
-            <span>SOC 2 Type II</span>
-          </div>
-          <div class="w-1 h-1 rounded-full bg-gray-700"></div>
-          <span>GDPR compliant</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-      <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-      </svg>
-    </div>
-  </section>
+    </section>
 
-  <!-- Problem Section -->
-  <section id="problem" class="py-24 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 reveal">
-        <span class="text-primary-400 text-sm font-semibold uppercase tracking-wider">The Problem</span>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-4 mb-6">
-          Your Revenue Is Leaking Every Month
-        </h2>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-          Failed payments are the silent killer of SaaS revenue. And the tools you're told to use are priced like enterprise software.
-        </p>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-8">
-        <!-- Stat 1 -->
-        <div class="metric-card rounded-2xl p-8 text-center reveal">
-          <div class="text-5xl font-bold gradient-text mb-2">9%</div>
-          <div class="text-white font-semibold mb-2">of SaaS payments fail monthly</div>
-          <p class="text-sm text-gray-500">That's nearly 1 in 10 transactions. For a $10K MRR business, that's $900+ in at-risk revenue every month.</p>
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2>Your "churn" isn't what you think</h2>
+            <p class="section-subtitle">
+                Most SaaS founders obsess over reducing churn from 5% to 3%. 
+                Meanwhile, 8-15% of their payments fail every month. 
+                That's not churn. It's recoverable revenue.
+            </p>
         </div>
-        
-        <!-- Stat 2 -->
-        <div class="metric-card rounded-2xl p-8 text-center reveal">
-          <div class="text-5xl font-bold text-red-400 mb-2">38%</div>
-          <div class="text-white font-semibold mb-2">recovery rate with Stripe alone</div>
-          <p class="text-sm text-gray-500">Stripe's built-in dunning recovers less than half. The rest is churn that looks like "customer choice" but is really a payment problem.</p>
-        </div>
-        
-        <!-- Stat 3 -->
-        <div class="metric-card rounded-2xl p-8 text-center reveal">
-          <div class="text-5xl font-bold text-emerald-400 mb-2">$250+</div>
-          <div class="text-white font-semibold mb-2">per month for existing tools</div>
-          <p class="text-sm text-gray-500">Churnkey, Churn Buster, and others charge enterprise prices. Indie founders are priced out of protecting their revenue.</p>
-        </div>
-      </div>
-      
-      <!-- Additional context -->
-      <div class="mt-16 bg-dark-850 rounded-2xl p-8 lg:p-12 border border-primary-900/20 reveal">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <h3 class="text-2xl font-bold text-white mb-4">Why payments fail (and what actually helps)</h3>
-            <div class="space-y-4">
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0 mt-1">
-                  <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Hidden Revenue Leak</h3>
+                <p>Stripe blends real cancellations with payment failures. Your "churn" dashboard hides the truth.</p>
+                <div class="problem-stat">
+                    <div class="problem-stat-value">$89K</div>
+                    <div class="problem-stat-label">avg lost per year (1M ARR)</div>
                 </div>
-                <div>
-                  <div class="text-white font-medium">Insufficient funds (35%)</div>
-                  <p class="text-sm text-gray-500">Stripe retries at fixed intervals. Smart timing based on payday patterns recovers 2x more.</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center flex-shrink-0 mt-1">
-                  <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-                  </svg>
-                </div>
-                <div>
-                  <div class="text-white font-medium">Expired or replaced card (28%)</div>
-                  <p class="text-sm text-gray-500">Customers forget to update. Proactive email sequences with one-click updates fix this.</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center flex-shrink-0 mt-1">
-                  <svg class="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
-                  </svg>
-                </div>
-                <div>
-                  <div class="text-white font-medium">Bank blocks / fraud flags (22%)</div>
-                  <p class="text-sm text-gray-5">International transactions trigger blocks. Retry logic with local acquirers reduces failures.</p>
-                </div>
-              </div>
             </div>
-          </div>
-          <div class="relative">
-            <div class="gradient-border rounded-2xl">
-              <div class="gradient-border-inner p-6">
-                <div class="text-sm text-gray-500 mb-4">Monthly Revenue at Risk</div>
-                <div class="space-y-3">
-                  <div class="flex justify-between items-center">
-                    <span class="text-gray-400">$5K MRR</span>
-                    <span class="text-red-400 font-semibold">~$450/mo lost</span>
-                  </div>
-                  <div class="w-full bg-dark-950 rounded-full h-2">
-                    <div class="bg-gradient-to-r from-red-500 to-red-600 h-2 rounded-full" style="width: 9%"></div>
-                  </div>
-                  <div class="flex justify-between items-center pt-2">
-                    <span class="text-gray-400">$20K MRR</span>
-                    <span class="text-red-400 font-semibold">~$1,800/mo lost</span>
-                  </div>
-                  <div class="w-full bg-dark-950 rounded-full h-2">
-                    <div class="bg-gradient-to-r from-red-500 to-red-600 h-2 rounded-full" style="width: 18%"></div>
-                  </div>
-                  <div class="flex justify-between items-center pt-2">
-                    <span class="text-gray-400">$50K MRR</span>
-                    <span class="text-red-400 font-semibold">~$4,500/mo lost</span>
-                  </div>
-                  <div class="w-full bg-dark-950 rounded-full h-2">
-                    <div class="bg-gradient-to-r from-red-500 to-red-600 h-2 rounded-full" style="width: 35%"></div>
-                  </div>
+            <div class="problem-card">
+                <div class="problem-icon">😴</div>
+                <h3>No Recovery System</h3>
+                <p>Most companies do nothing about failed payments. No retries. No emails. Just lost revenue.</p>
+                <div class="problem-stat">
+                    <div class="problem-stat-value">70%</div>
+                    <div class="problem-stat-label">of failures go unrecovered</div>
                 </div>
-                <div class="mt-6 p-4 bg-primary-900/20 rounded-xl border border-primary-700/20">
-                  <p class="text-sm text-primary-300">
-                    <strong>At $20K MRR:</strong> You're losing $21,600/year to failed payments. SimpleRecover pays for itself in the first recovered customer.
-                  </p>
-                </div>
-              </div>
             </div>
-          </div>
+            <div class="problem-card">
+                <div class="problem-icon">📉</div>
+                <h3>Compounding Loss</h3>
+                <p>Every month you wait, the leak compounds. Failed payments stack up while you focus on the wrong metrics.</p>
+                <div class="problem-stat">
+                    <div class="problem-stat-value">12%</div>
+                    <div class="problem-stat-label">avg monthly failure rate</div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Demo Section -->
-  <section id="demo" class="py-24 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 reveal">
-        <span class="text-primary-400 text-sm font-semibold uppercase tracking-wider">Dashboard Preview</span>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-4 mb-6">
-          See Your Recovery Metrics in Real-Time
-        </h2>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-          A clean, focused dashboard that shows exactly what you need — no enterprise BI complexity.
-        </p>
-      </div>
-      
-      <!-- Demo Screenshot Area -->
-      <div class="max-w-5xl mx-auto reveal">
-        <div class="gradient-border rounded-2xl">
-          <div class="gradient-border-inner rounded-2xl overflow-hidden">
-            <!-- Browser chrome -->
-            <div class="bg-dark-850 px-4 py-3 flex items-center gap-2 border-b border-primary-900/20">
-              <div class="flex gap-1.5">
-                <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
-                <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
-              </div>
-              <div class="flex-1 mx-4">
-                <div class="bg-dark-950 rounded-md px-3 py-1 text-xs text-gray-600 text-center">app.simplerecover.io/dashboard</div>
-              </div>
-            </div>
-            <!-- Dashboard content -->
-            <div class="bg-dark-900 p-6 lg:p-8">
-              <!-- Top metrics -->
-              <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div class="bg-dark-850 rounded-xl p-4 border border-primary-900/10">
-                  <div class="text-xs text-gray-500 mb-1">Recovered This Month</div>
-                  <div class="text-2xl font-bold text-white">$4,280</div>
-                  <div class="text-xs text-emerald-400 mt-1">+12% vs last month</div>
-                </div>
-                <div class="bg-dark-850 rounded-xl p-4 border border-primary-900/10">
-                  <div class="text-xs text-gray-500 mb-1">Recovery Rate</div>
-                  <div class="text-2xl font-bold text-emerald-400">67%</div>
-                  <div class="text-xs text-gray-500 mt-1">vs 38% Stripe default</div>
-                </div>
-                <div class="bg-dark-850 rounded-xl p-4 border border-primary-900/10">
-                  <div class="text-xs text-gray-500 mb-1">Failed Payments</div>
-                  <div class="text-2xl font-bold text-white">23</div>
-                  <div class="text-xs text-gray-500 mt-1">8 still in sequence</div>
-                </div>
-                <div class="bg-dark-850 rounded-xl p-4 border border-primary-900/10">
-                  <div class="text-xs text-gray-500 mb-1">Revenue Saved (YTD)</div>
-                  <div class="text-2xl font-bold text-white">$31,420</div>
-                  <div class="text-xs text-emerald-400 mt-1">ROI: 165x</div>
-                </div>
-              </div>
-              
-              <!-- Main chart area -->
-              <div class="bg-dark-850 rounded-xl p-6 border border-primary-900/10 mb-6">
-                <div class="flex items-center justify-between mb-4">
-                  <div class="text-sm font-medium text-white">Recovery Trend</div>
-                  <div class="flex gap-2">
-                    <span class="text-xs px-2 py-1 rounded bg-primary-900/30 text-primary-300">30 days</span>
-                    <span class="text-xs px-2 py-1 rounded bg-dark-950 text-gray-500">90 days</span>
-                  </div>
-                </div>
-                <!-- Simplified chart visualization -->
-                <div class="flex items-end gap-1 h-40">
-                  <div class="flex-1 bg-primary-700/30 rounded-t" style="height: 35%"></div>
-                  <div class="flex-1 bg-primary-700/40 rounded-t" style="height: 42%"></div>
-                  <div class="flex-1 bg-primary-700/50 rounded-t" style="height: 38%"></div>
-                  <div class="flex-1 bg-primary-700/60 rounded-t" style="height: 55%"></div>
-                  <div class="flex-1 bg-primary-700/50 rounded-t" style="height: 48%"></div>
-                  <div class="flex-1 bg-primary-600/70 rounded-t" style="height: 62%"></div>
-                  <div class="flex-1 bg-primary-500/80 rounded-t" style="height: 58%"></div>
-                  <div class="flex-1 bg-primary-500 rounded-t" style="height: 75%"></div>
-                  <div class="flex-1 bg-primary-400 rounded-t" style="height: 82%"></div>
-                  <div class="flex-1 bg-emerald-500 rounded-t" style="height: 90%"></div>
-                  <div class="flex-1 bg-emerald-400 rounded-t" style="height: 85%"></div>
-                  <div class="flex-1 bg-emerald-400 rounded-t" style="height: 95%"></div>
-                </div>
-                <div class="flex justify-between text-xs text-gray-600 mt-2">
-                  <span>May 1</span>
-                  <span>May 15</span>
-                  <span>May 31</span>
-                </div>
-              </div>
-              
-              <!-- Recent recoveries table -->
-              <div class="bg-dark-850 rounded-xl border border-primary-900/10 overflow-hidden">
-                <div class="px-6 py-4 border-b border-primary-900/10 text-sm font-medium text-white">Recent Recoveries</div>
-                <div class="divide-y divide-primary-900/10">
-                  <div class="px-6 py-3 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
-                      </div>
-                      <div>
-                        <div class="text-sm text-white">customer@example.com</div>
-                        <div class="text-xs text-gray-500">Card updated via email</div>
-                      </div>
-                    </div>
-                    <div class="text-right">
-                      <div class="text-sm text-white font-medium">$49.00</div>
-                      <div class="text-xs text-emerald-400">Recovered</div>
-                    </div>
-                  </div>
-                  <div class="px-6 py-3 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
-                      </div>
-                      <div>
-                        <div class="text-sm text-white">user@saasapp.io</div>
-                        <div class="text-xs text-gray-500">Smart retry #3 succeeded</div>
-                      </div>
-                    </div>
-                    <div class="text-right">
-                      <div class="text-sm text-white font-medium">$99.00</div>
-                      <div class="text-xs text-emerald-400">Recovered</div>
-                    </div>
-                  </div>
-                  <div class="px-6 py-3 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 rounded-full bg-yellow-500/10 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                      </div>
-                      <div>
-                        <div class="text-sm text-white">founder@startup.dev</div>
-                        <div class="text-xs text-gray-500">Email sequence in progress</div>
-                      </div>
-                    </div>
-                    <div class="text-right">
-                      <div class="text-sm text-white font-medium">$29.00</div>
-                      <div class="text-xs text-yellow-400">Pending</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <!-- Solution Section -->
+    <section class="solution-section" id="solution">
+        <div class="section-header">
+            <div class="section-label">How It Works</div>
+            <h2>Recover revenue in 3 steps</h2>
+            <p class="section-subtitle">
+                Connect Stripe. Configure once. Recover forever.
+                No code changes to your app.
+            </p>
         </div>
-        <p class="text-center text-sm text-gray-600 mt-4">Dashboard screenshot — actual UI may vary slightly as we ship improvements weekly.</p>
-      </div>
-    </div>
-  </section>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Detect</h3>
+                <p>Real-time webhook monitoring catches every failed payment the moment it happens.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Recover</h3>
+                <p>Smart retry logic optimized by time, day, card type, and failure reason.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Retain</h3>
+                <p>Dunning email sequences that sound human, not robotic. 25-40% recovery from emails alone.</p>
+            </div>
+        </div>
+    </section>
 
-  <!-- Solution Section -->
-  <section id="solution" class="py-24 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 reveal">
-        <span class="text-primary-400 text-sm font-semibold uppercase tracking-wider">The Solution</span>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-4 mb-6">
-          Three Recovery Mechanisms,<br>One Flat Price
-        </h2>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-          We built the exact dunning system we wished existed for our own SaaS products. No fluff. Just results.
-        </p>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-8">
-        <!-- Feature 1 -->
-        <div class="gradient-border rounded-2xl reveal">
-          <div class="gradient-border-inner rounded-2xl p-8 h-full">
-            <div class="feature-icon w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-              <svg class="w-7 h-7 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-white mb-3">Smart Retries</h3>
-            <p class="text-gray-400 mb-4">Stripe retries at dumb intervals. We retry based on decline codes, bank patterns, and time-of-day data. Up to 8 retry attempts over 21 days.</p>
-            <ul class="space-y-2">
-              <li class="flex items-center gap-2 text-sm text-gray-500">
-                <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Decline-code-aware timing
-              </li>
-              <li class="flex items-center gap-2 text-sm text-gray-500">
-                <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Weekend/holiday skipping
-              </li>
-              <li class="flex items-center gap-2 text-sm text-gray-500">
-                <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Backoff curves per card type
-              </li>
-            </ul>
-          </div>
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="section-header">
+            <div class="section-label">Features</div>
+            <h2>Everything you need to recover revenue</h2>
+            <p class="section-subtitle">
+                Built by founders, for founders. No enterprise bloat. 
+                Just the features that actually recover payments.
+            </p>
         </div>
-        
-        <!-- Feature 2 -->
-        <div class="gradient-border rounded-2xl reveal">
-          <div class="gradient-border-inner rounded-2xl p-8 h-full">
-            <div class="feature-icon w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-              <svg class="w-7 h-7 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-              </svg>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Real-Time Detection</h3>
+                <p>Webhook-powered alerts the moment a payment fails. No batch delays. No polling.</p>
             </div>
-            <h3 class="text-xl font-bold text-white mb-3">Email Sequences</h3>
-            <p class="text-gray-400 mb-4">Pre-built dunning sequences that actually get opened. Personalized sender, mobile-optimized, and written to sound human — not robotic.</p>
-            <ul class="space-y-2">
-              <li class="flex items-center gap-2 text-sm text-gray-500">
-                <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                5-email sequence included
-              </li>
-              <li class="flex items-center gap-2 text-sm text-gray-500">
-                <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Customizable copy & timing
-              </li>
-              <li class="flex items-center gap-2 text-sm text-gray-500">
-                <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                42% average open rate
-              </li>
-            </ul>
-          </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Smart Retry Logic</h3>
+                <p>Optimized timing based on card type, failure reason, and customer behavior patterns.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✉️</div>
+                <h3>Dunning Sequences</h3>
+                <p>5-email sequence that actually works. Mobile-friendly. Human tone. Clear CTAs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Recovery Dashboard</h3>
+                <p>See exactly how much you've recovered, your recovery rate, and MRR at risk.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔔</div>
+                <h3>Slack Alerts</h3>
+                <p>Get notified in Slack when high-value payments fail or recoveries happen.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure by Default</h3>
+                <p>Restricted API keys. Webhook signature verification. No write access needed.</p>
+            </div>
         </div>
-        
-        <!-- Feature 3 -->
-        <div class="gradient-border rounded-2xl reveal">
-          <div class="gradient-border-inner rounded-2xl p-8 h-full">
-            <div class="feature-icon w-14 h-14 rounded-xl flex items-center justify-center mb-6">
-              <svg class="w-7 h-7 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-white mb-3">One-Click Card Updates</h3>
-            <p class="text-gray-400 mb-4">Customers update expired cards in 10 seconds from their phone. No login required. No support ticket needed. No friction = no churn.</p>
-            <ul class="space-y-2">
-              <li class="flex items-center gap-2 text-sm text-gray-500">
-                <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Branded update pages
-              </li>
-              <li class="flex items-center gap-2 text-sm text-gray-500">
-                <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                No customer login needed
-              </li>
-              <li class="flex items-center gap-2 text-sm text-gray-500">
-                <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Apple Pay / Google Pay support
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      <!-- How it works -->
-      <div class="mt-20 reveal">
-        <h3 class="text-2xl font-bold text-white text-center mb-12">How It Works</h3>
-        <div class="grid md:grid-cols-4 gap-6">
-          <div class="text-center">
-            <div class="w-16 h-16 rounded-2xl bg-primary-900/30 border border-primary-700/30 flex items-center justify-center mx-auto mb-4">
-              <span class="text-2xl font-bold gradient-text">1</span>
-            </div>
-            <h4 class="text-white font-semibold mb-2">Connect Stripe</h4>
-            <p class="text-sm text-gray-500">One-click OAuth. Read-only webhooks. No code changes to your app.</p>
-          </div>
-          <div class="text-center">
-            <div class="w-16 h-16 rounded-2xl bg-primary-900/30 border border-primary-700/30 flex items-center justify-center mx-auto mb-4">
-              <span class="text-2xl font-bold gradient-text">2</span>
-            </div>
-            <h4 class="text-white font-semibold mb-2">Choose Strategy</h4>
-            <p class="text-sm text-gray-500">Pick a pre-built sequence or customize retry timing and email copy.</p>
-          </div>
-          <div class="text-center">
-            <div class="w-16 h-16 rounded-2xl bg-primary-900/30 border border-primary-700/30 flex items-center justify-center mx-auto mb-4">
-              <span class="text-2xl font-bold gradient-text">3</span>
-            </div>
-            <h4 class="text-white font-semibold mb-2">We Handle Rest</h4>
-            <p class="text-sm text-gray-500">Retries, emails, and card update pages run automatically 24/7.</p>
-          </div>
-          <div class="text-center">
-            <div class="w-16 h-16 rounded-2xl bg-primary-900/30 border border-primary-700/30 flex items-center justify-center mx-auto mb-4">
-              <span class="text-2xl font-bold gradient-text">4</span>
-            </div>
-            <h4 class="text-white font-semibold mb-2">Watch Revenue Grow</h4>
-            <p class="text-sm text-gray-500">Track recoveries in real-time. Average customer sees ROI in 48 hours.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Testimonials -->
-  <section class="py-24 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 reveal">
-        <span class="text-primary-400 text-sm font-semibold uppercase tracking-wider">Founder Stories</span>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-4 mb-6">
-          Real Results from Real Founders
-        </h2>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="testimonial-card rounded-2xl p-8 reveal">
-          <div class="flex items-center gap-1 mb-4">
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-          </div>
-          <p class="text-gray-300 mb-6">"We were losing ~$800/mo to failed payments on our $12K MRR. SimpleRecover got us back $520 in the first month. It literally paid for itself 27 times over."</p>
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-primary-700 flex items-center justify-center text-white font-semibold">JD</div>
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="section-header">
+            <div class="section-label">Pricing</div>
+            <h2>Simple pricing, massive ROI</h2>
+            <p class="section-subtitle">
+                Every plan pays for itself. Most users recover 50-100x their monthly cost in the first week.
+            </p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-name">Free</div>
+                <div class="pricing-desc">For small projects</div>
+                <div class="pricing-price">$0<span>/mo</span></div>
+                <ul class="pricing-features">
+                    <li>Up to 50 customers</li>
+                    <li>Basic retry logic</li>
+                    <li>3 dunning emails</li>
+                    <li>Email support</li>
+                    <li class="disabled">Smart timing</li>
+                    <li class="disabled">Slack alerts</li>
+                    <li class="disabled">Custom emails</li>
+                </ul>
+                <a href="#cta" class="btn btn-secondary">Get Started</a>
+            </div>
+            <div class="pricing-card popular">
+                <div class="popular-badge">Most Popular</div>
+                <div class="pricing-name">Starter</div>
+                <div class="pricing-desc">For growing SaaS</div>
+                <div class="pricing-price">$49<span>/mo</span></div>
+                <ul class="pricing-features">
+                    <li>Up to 500 customers</li>
+                    <li>Smart retry logic</li>
+                    <li>5 dunning emails</li>
+                    <li>Priority support</li>
+                    <li>Smart timing</li>
+                    <li class="disabled">Slack alerts</li>
+                    <li class="disabled">Custom emails</li>
+                </ul>
+                <a href="#cta" class="btn btn-primary">Start Free Trial</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-name">Pro</div>
+                <div class="pricing-desc">For established SaaS</div>
+                <div class="pricing-price">$99<span>/mo</span></div>
+                <ul class="pricing-features">
+                    <li>Up to 2,500 customers</li>
+                    <li>Advanced retry logic</li>
+                    <li>Custom dunning builder</li>
+                    <li>Priority support</li>
+                    <li>Smart timing</li>
+                    <li>Slack alerts</li>
+                    <li>A/B testing</li>
+                </ul>
+                <a href="#cta" class="btn btn-secondary">Start Free Trial</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-name">Enterprise</div>
+                <div class="pricing-desc">For large teams</div>
+                <div class="pricing-price">$299<span>/mo</span></div>
+                <ul class="pricing-features">
+                    <li>Unlimited customers</li>
+                    <li>Custom retry strategies</li>
+                    <li>White-label emails</li>
+                    <li>Dedicated support</li>
+                    <li>Smart timing</li>
+                    <li>Slack + SMS alerts</li>
+                    <li>API access</li>
+                </ul>
+                <a href="#cta" class="btn btn-secondary">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-label">Testimonials</div>
+            <h2>Loved by SaaS founders</h2>
+            <p class="section-subtitle">
+                Join 87 companies already protecting their revenue.
+            </p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"I thought our churn was 8%. Turns out it was 3% churn + 5% failed payments. SimpleRecover recovered $3K in the first week. Setup took 10 minutes."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">JD</div>
+                    <div>
+                        <div class="testimonial-name">James Davidson</div>
+                        <div class="testimonial-role">CEO, TaskFlow</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"The emails actually sound human. Not robotic like our previous dunning tool. Recovery rate went from 28% to 61% in two weeks."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SM</div>
+                    <div>
+                        <div class="testimonial-name">Sarah Mitchell</div>
+                        <div class="testimonial-role">Founder, DataSync</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Setup took 8 minutes. First recovery happened 2 hours later. The dashboard is addictive — I check it every morning now."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">RK</div>
+                    <div>
+                        <div class="testimonial-name">Ryan Kim</div>
+                        <div class="testimonial-role">CTO, CloudBase</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section" id="faq">
+        <div class="section-header">
+            <div class="section-label">FAQ</div>
+            <h2>Questions? Answers.</h2>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question">
+                    How does SimpleRecover connect to Stripe?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>SimpleRecover uses Stripe webhooks and a restricted API key. You create a webhook endpoint pointing to SimpleRecover, and provide a read-only API key. We never charge your customers or modify your Stripe data — we only read payment events and trigger retries through Stripe's API.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    How long does setup take?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Average setup time is 10 minutes. Connect your Stripe account, configure your dunning email templates, and set your retry schedule. No code changes to your app required.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    What payment methods do you support?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Currently Stripe (credit/debit cards). PayPal support is on our Q3 roadmap. We optimize retry logic based on card type, failure reason, and customer behavior.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Can I customize the dunning emails?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! Starter plan includes our proven 5-email sequence. Pro and Enterprise plans include a drag-and-drop email builder where you can customize branding, tone, timing, and content.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Is my customer data secure?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutely. We use restricted API keys with read-only access. Webhook signatures are verified. We don't store full card numbers. Data is encrypted at rest and in transit.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    What if I want to cancel?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Cancel anytime. No contracts, no questions. Your data is exportable. If you're on annual billing, we'll prorate the refund. We win when you win — if you're not recovering revenue, we don't deserve your business.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Do you offer annual billing?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! Annual billing includes 2 months free (17% discount). Contact us for enterprise annual contracts with additional custom terms.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Can I see a demo before signing up?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Of course! Start a free 14-day trial — no credit card required. You'll see the full dashboard, recovery analytics, and email previews. Or book a 15-minute demo with our team.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <h2>Stop losing revenue<br>to failed payments</h2>
+        <p>Join 87 SaaS companies recovering 40-60% of failed payments automatically. Setup takes 10 minutes. ROI is immediate.</p>
+        <div class="hero-buttons">
+            <a href="#" class="btn btn-primary">Start Free Trial — 14 Days</a>
+            <a href="#" class="btn btn-secondary">Book a Demo</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
             <div>
-              <div class="text-white font-medium">Jake D.</div>
-              <div class="text-sm text-gray-500">Founder, TaskFlow.io</div>
+                <div class="footer-brand">SimpleRecover</div>
+                <p class="footer-desc">Recover failed Stripe payments automatically. Built by founders, for founders.</p>
             </div>
-          </div>
-        </div>
-        
-        <div class="testimonial-card rounded-2xl p-8 reveal">
-          <div class="flex items-center gap-1 mb-4">
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-          </div>
-          <p class="text-gray-300 mb-6">"Churnkey quoted us $250+/mo. We're a 2-person team — that's insane. SimpleRecover does 90% of what we need for $19. The ROI math is stupidly obvious."</p>
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-emerald-700 flex items-center justify-center text-white font-semibold">SL</div>
-            <div>
-              <div class="text-white font-medium">Sarah L.</div>
-              <div class="text-sm text-gray-500">Co-founder, DocuSync</div>
+            <div class="footer-links">
+                <h4>Product</h4>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#">Changelog</a>
+                <a href="#">Roadmap</a>
             </div>
-          </div>
-        </div>
-        
-        <div class="testimonial-card rounded-2xl p-8 reveal">
-          <div class="flex items-center gap-1 mb-4">
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-          </div>
-          <p class="text-gray-300 mb-6">"Set it up in literally 3 minutes. The smart retry logic recovered payments Stripe had already given up on. Our recovery rate went from 34% to 71%."</p>
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center text-white font-semibold">MK</div>
-            <div>
-              <div class="text-white font-medium">Marcus K.</div>
-              <div class="text-sm text-gray-500">Solo founder, APIAnalytics</div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
             </div>
-          </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Security</a>
+                <a href="#">Cookies</a>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+        <div class="footer-bottom">
+            <div>© 2026 SimpleRecover. All rights reserved.</div>
+            <div>Made with ❤️ for SaaS founders</div>
+        </div>
+    </footer>
 
-  <!-- Pricing Section -->
-  <section id="pricing" class="py-24 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 reveal">
-        <span class="text-primary-400 text-sm font-semibold uppercase tracking-wider">Pricing</span>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-4 mb-6">
-          One Plan. One Price. No Games.
-        </h2>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-          We don't do "contact sales" pricing. Every founder pays the same flat rate — whether you're at $5K MRR or $500K MRR.
-        </p>
-      </div>
-      
-      <div class="max-w-md mx-auto reveal">
-        <div class="gradient-border rounded-2xl">
-          <div class="gradient-border-inner rounded-2xl p-8 relative overflow-hidden">
-            <!-- Popular badge -->
-            <div class="absolute top-4 right-4">
-              <span class="bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-500/20">Best Value</span>
-            </div>
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                
+                // Open clicked if wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            const currentScroll = window.pageYOffset;
             
-            <div class="mb-6">
-              <h3 class="text-2xl font-bold text-white mb-2">SimpleRecover Pro</h3>
-              <p class="text-gray-500">Everything you need to recover revenue</p>
-            </div>
+            if (currentScroll > 100) {
+                nav.style.background = 'rgba(10, 10, 15, 0.95)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 15, 0.8)';
+            }
             
-            <div class="mb-8">
-              <div class="flex items-baseline gap-1">
-                <span class="text-5xl font-bold text-white">$19</span>
-                <span class="text-gray-500">/month</span>
-              </div>
-              <p class="text-sm text-emerald-400 mt-2">14-day free trial. No credit card required.</p>
-            </div>
-            
-            <ul class="space-y-4 mb-8">
-              <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                <span class="text-gray-300">Unlimited failed payment recovery</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                <span class="text-gray-300">Smart retry engine (8 attempts)</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                <span class="text-gray-300">5-email dunning sequence</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                <span class="text-gray-300">Branded card update pages</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                <span class="text-gray-300">Real-time recovery dashboard</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                <span class="text-gray-300">Slack & email notifications</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                <span class="text-gray-300">Webhook & API access</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                <span class="text-gray-300">Priority email support</span>
-              </li>
-            </ul>
-            
-            <a href="signup.html" class="btn-primary block text-center text-white px-8 py-4 rounded-xl text-lg font-semibold">
-              Start Free Trial
-            </a>
-            <p class="text-center text-xs text-gray-600 mt-4">Cancel anytime. No setup fees. No hidden charges.</p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Trust badges -->
-      <div class="flex flex-wrap items-center justify-center gap-8 mt-16 reveal">
-        <div class="flex items-center gap-2 text-gray-500">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-          <span class="text-sm">SSL Encrypted</span>
-        </div>
-        <div class="flex items-center gap-2 text-gray-500">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-          </svg>
-          <span class="text-sm">SOC 2 Type II</span>
-        </div>
-        <div class="flex items-center gap-2 text-gray-500">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
-          </svg>
-          <span class="text-sm">PCI Compliant</span>
-        </div>
-        <div class="flex items-center gap-2 text-gray-500">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/>
-          </svg>
-          <span class="text-sm">GDPR Ready</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Comparison Section -->
-  <section id="comparison" class="py-24 relative">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 reveal">
-        <span class="text-primary-400 text-sm font-semibold uppercase tracking-wider">Comparison</span>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-4 mb-6">
-          Why Pay 13x More for the Same Result?
-        </h2>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-          We compared SimpleRecover against the leading dunning tools on the market. The pricing gap is staggering.
-        </p>
-      </div>
-      
-      <div class="overflow-x-auto reveal">
-        <table class="w-full text-left">
-          <thead>
-            <tr class="border-b border-primary-900/30">
-              <th class="pb-4 text-gray-400 font-medium">Feature</th>
-              <th class="pb-4 text-center">
-                <div class="text-primary-400 font-bold">SimpleRecover</div>
-                <div class="text-2xl font-bold text-white">$19/mo</div>
-              </th>
-              <th class="pb-4 text-center">
-                <div class="text-gray-400 font-bold">Churnkey</div>
-                <div class="text-2xl font-bold text-gray-500">$250+/mo</div>
-              </th>
-              <th class="pb-4 text-center">
-                <div class="text-gray-400 font-bold">Churn Buster</div>
-                <div class="text-2xl font-bold text-gray-500">$249/mo</div>
-              </th>
-              <th class="pb-4 text-center">
-                <div class="text-gray-400 font-bold">Baremetrics</div>
-                <div class="text-2xl font-bold text-gray-500">$100+/mo</div>
-              </th>
-            </tr>
-          </thead>
-          <tbody class="text-sm">
-            <tr class="comparison-row border-b border-primary-900/10">
-              <td class="py-4 text-gray-300">Pricing model</td>
-              <td class="py-4 text-center text-emerald-400 font-medium">Flat fee</td>
-              <td class="py-4 text-center text-gray-500">MRR-based</td>
-              <td class="py-4 text-center text-gray-500">MRR-based</td>
-              <td class="py-4 text-center text-gray-500">Revenue share</td>
-            </tr>
-            <tr class="comparison-row border-b border-primary-900/10">
-              <td class="py-4 text-gray-300">Revenue share</td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-red-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-            </tr>
-            <tr class="comparison-row border-b border-primary-900/10">
-              <td class="py-4 text-gray-300">Smart retries</td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-            </tr>
-            <tr class="comparison-row border-b border-primary-900/10">
-              <td class="py-4 text-gray-300">Email sequences</td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-            </tr>
-            <tr class="comparison-row border-b border-primary-900/10">
-              <td class="py-4 text-gray-300">Card update pages</td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-red-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></td>
-            </tr>
-            <tr class="comparison-row border-b border-primary-900/10">
-              <td class="py-4 text-gray-300">Cancel flow / retention</td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-red-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-emerald-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-red-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></td>
-              <td class="py-4 text-center"><svg class="w-5 h-5 text-red-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></td>
-            </tr>
-            <tr class="comparison-row border-b border-primary-900/10">
-              <td class="py-4 text-gray-300">Setup time</td>
-              <td class="py-4 text-center text-emerald-400 font-medium">2 minutes</td>
-              <td class="py-4 text-center text-gray-500">1-2 days</td>
-              <td class="py-4 text-center text-gray-500">30 minutes</td>
-              <td class="py-4 text-center text-gray-500">1 hour</td>
-            </tr>
-            <tr class="comparison-row border-b border-primary-900/10">
-              <td class="py-4 text-gray-300">Support</td>
-              <td class="py-4 text-center text-emerald-400 font-medium">Email (founders)</td>
-              <td class="py-4 text-center text-gray-500">Dedicated CSM</td>
-              <td class="py-4 text-center text-gray-500">Email/Chat</td>
-              <td class="py-4 text-center text-gray-500">Email</td>
-            </tr>
-            <tr class="comparison-row">
-              <td class="py-4 text-gray-300 font-medium">Annual cost at $20K MRR</td>
-              <td class="py-4 text-center text-emerald-400 font-bold text-lg">$228</td>
-              <td class="py-4 text-center text-gray-500 font-bold text-lg">$3,000+</td>
-              <td class="py-4 text-center text-gray-500 font-bold text-lg">$2,988</td>
-              <td class="py-4 text-center text-gray-500 font-bold text-lg">$1,200+</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <p class="text-center text-sm text-gray-600 mt-6">
-        Pricing data sourced from public pricing pages as of May 2026. MRR-based pricing scales with your revenue.
-      </p>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section class="py-24 relative">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 reveal">
-        <span class="text-primary-400 text-sm font-semibold uppercase tracking-wider">FAQ</span>
-        <h2 class="text-3xl sm:text-4xl font-bold text-white mt-4 mb-6">
-          Questions? Answered.
-        </h2>
-      </div>
-      
-      <div class="space-y-4 reveal">
-        <details class="bg-dark-850 rounded-xl border border-primary-900/20 overflow-hidden group">
-          <summary class="px-6 py-4 cursor-pointer flex items-center justify-between text-white font-medium hover:bg-primary-900/10 transition-colors">
-            <span>Do I need to change my Stripe integration?</span>
-            <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
-          </summary>
-          <div class="px-6 pb-4 text-gray-400">
-            Nope. SimpleRecover connects via Stripe Connect (OAuth) and uses webhooks. Zero code changes. Zero downtime. Your existing billing flow stays exactly the same.
-          </div>
-        </details>
-        
-        <details class="bg-dark-850 rounded-xl border border-primary-900/20 overflow-hidden group">
-          <summary class="px-6 py-4 cursor-pointer flex items-center justify-between text-white font-medium hover:bg-primary-900/10 transition-colors">
-            <span>What happens after the 14-day trial?</span>
-            <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
-          </summary>
-          <div class="px-6 pb-4 text-gray-400">
-            We ask for a credit card and you start paying $19/mo. If you choose not to continue, we simply stop retrying and sending emails. No data lock-in. You can export everything.
-          </div>
-        </details>
-        
-        <details class="bg-dark-850 rounded-xl border border-primary-900/20 overflow-hidden group">
-          <summary class="px-6 py-4 cursor-pointer flex items-center justify-between text-white font-medium hover:bg-primary-900/10 transition-colors">
-            <span>Does this work with PayPal, Paddle, or Lemon Squeezy?</span>
-            <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
-          </summary>
-          <div class="px-6 pb-4 text-gray-400">
-            Currently Stripe only. We're evaluating Paddle and Lemon Squeezy support for Q3 2026. PayPal is unlikely due to their limited webhook capabilities for dunning.
-          </div>
-        </details>
-        
-        <details class="bg-dark-850 rounded-xl border border-primary-900/20 overflow-hidden group">
-          <summary class="px-6 py-4 cursor-pointer flex items-center justify-between text-white font-medium hover:bg-primary-900/10 transition-colors">
-            <span>Can I customize the email copy?</span>
-            <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
-          </summary>
-          <div class="px-6 pb-4 text-gray-400">
-            Yes. Every email in the sequence is editable. We provide templates that work out of the box, but you can rewrite them to match your brand voice. We also support custom sender names and reply-to addresses.
-          </div>
-        </details>
-        
-        <details class="bg-dark-850 rounded-xl border border-primary-900/20 overflow-hidden group">
-          <summary class="px-6 py-4 cursor-pointer flex items-center justify-between text-white font-medium hover:bg-primary-900/10 transition-colors">
-            <span>Is my customer data safe?</span>
-            <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
-          </summary>
-          <div class="px-6 pb-4 text-gray-400">
-            We never store full card numbers — Stripe handles all payment data. We store email addresses and payment metadata (last 4 digits, expiry date) encrypted at rest. We're SOC 2 Type II certified and GDPR compliant.
-          </div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- Final CTA -->
-  <section class="py-24 relative">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
-      <div class="gradient-border rounded-2xl">
-        <div class="gradient-border-inner rounded-2xl p-12 lg:p-16">
-          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-            Start Recovering Revenue Today
-          </h2>
-          <p class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
-            14-day free trial. No credit card. No setup. Connect Stripe and see your first recoveries within hours.
-          </p>
-          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="signup.html" class="btn-primary text-white px-8 py-4 rounded-xl text-lg font-semibold inline-flex items-center gap-2">
-              Start Free Trial
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-              </svg>
-            </a>
-          </div>
-          <p class="text-sm text-gray-600 mt-6">
-            Trusted by 200+ indie SaaS founders. Average recovery rate: 64%.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="border-t border-primary-900/20 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid md:grid-cols-4 gap-8 mb-8">
-        <div class="md:col-span-2">
-          <a href="index.html" class="flex items-center gap-2 mb-4">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
-              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-              </svg>
-            </div>
-            <span class="text-white font-bold text-lg">SimpleRecover</span>
-          </a>
-          <p class="text-gray-500 text-sm max-w-sm">
-            Stripe-native dunning built for indie SaaS founders. Recover failed payments automatically without enterprise pricing.
-          </p>
-        </div>
-        <div>
-          <h4 class="text-white font-semibold mb-4">Product</h4>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#solution" class="text-gray-500 hover:text-white transition-colors">Features</a></li>
-            <li><a href="pricing.html" class="text-gray-500 hover:text-white transition-colors">Pricing</a></li>
-            <li><a href="#comparison" class="text-gray-500 hover:text-white transition-colors">Comparison</a></li>
-            <li><a href="#" class="text-gray-500 hover:text-white transition-colors">API Docs</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-white font-semibold mb-4">Company</h4>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#" class="text-gray-500 hover:text-white transition-colors">About</a></li>
-            <li><a href="#" class="text-gray-500 hover:text-white transition-colors">Blog</a></li>
-            <li><a href="#" class="text-gray-500 hover:text-white transition-colors">Privacy</a></li>
-            <li><a href="#" class="text-gray-500 hover:text-white transition-colors">Terms</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="border-t border-primary-900/20 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p class="text-sm text-gray-600"> 2026 SimpleRecover. All rights reserved.</p>
-        <div class="flex items-center gap-4">
-          <a href="#" class="text-gray-600 hover:text-white transition-colors">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
-          </a>
-          <a href="#" class="text-gray-600 hover:text-white transition-colors">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    // Mobile menu toggle
-    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-      document.getElementById('mobile-menu').classList.toggle('hidden');
-    });
-    
-    // Scroll reveal animation
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
-      });
-    }, observerOptions);
-    
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    
-    // Add animation delay to staggered elements
-    document.querySelectorAll('.reveal').forEach((el, index) => {
-      el.style.animationDelay = `${index * 0.1}s`;
-    });
-  </script>
+            lastScroll = currentScroll;
+        });
+    </script>
 </body>
 </html>
